@@ -1,6 +1,7 @@
 package com.yooni.newsletter.domain.entity
 
 import com.yooni.newsletter.domain.AuditEntity
+import com.yooni.newsletter.helper.generateExternalId
 import com.yooni.newsletter.type.YesNoType
 import javax.persistence.*
 
@@ -9,7 +10,7 @@ data class NewsLetterInfo(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_letter_info_id")
-    val id: Long,
+    val id: Long? = null,
     val externalId: String,
     val labelId: String,
     val name: String,
@@ -29,4 +30,35 @@ data class NewsLetterInfo(
     val satYn: YesNoType,
     @Enumerated(EnumType.STRING)
     val sunYn: YesNoType
-) : AuditEntity()
+) : AuditEntity() {
+    constructor(
+        labelId: String,
+        name: String,
+        url: String,
+        description: String,
+        monYn: YesNoType,
+        tueYn: YesNoType,
+        wedYn: YesNoType,
+        thuYn: YesNoType,
+        friYn: YesNoType,
+        satYn: YesNoType,
+        sunYn: YesNoType
+    ) : this(
+        externalId = generateExternalId(ABBREVIATED_TABLE_NAME),
+        labelId = labelId,
+        name = name,
+        url = url,
+        description = description,
+        monYn = monYn,
+        tueYn = tueYn,
+        wedYn = wedYn,
+        thuYn = thuYn,
+        friYn = friYn,
+        satYn = satYn,
+        sunYn = sunYn
+    )
+
+    companion object {
+        private const val ABBREVIATED_TABLE_NAME = "nli"
+    }
+}
