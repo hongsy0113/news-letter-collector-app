@@ -20,7 +20,6 @@ class NewsLetterInfoOperationController(
     fun getNewsLetterInfo(@PathVariable("external_id") externalId: String) =
         newsLetterService.getNewsLetterInfo(externalId)?.let {
             NewsLetterInfoResponse(
-                id = it.id!!,
                 externalId = it.externalId,
                 labelId = it.labelId,
                 name = it.name,
@@ -53,12 +52,16 @@ class NewsLetterInfoOperationController(
                 friYn = friYn,
                 satYn = satYn,
                 sunYn = sunYn
-            )
+            ).let {
+                RegisterNewsLetterInfoResponse(
+                    name = it.name,
+                    externalId = it.externalId
+                )
+            }
         }
 }
 
 data class NewsLetterInfoResponse(
-    val id: Long,
     val externalId: String,
     val labelId: String,
     val name: String,
@@ -87,4 +90,9 @@ data class RegisterNewsLetterInfoRequest(
     val friYn: YesNoType = YesNoType.Y,
     val satYn: YesNoType = YesNoType.N,
     val sunYn: YesNoType = YesNoType.N
+)
+
+data class RegisterNewsLetterInfoResponse(
+    val name: String,
+    val externalId: String
 )
